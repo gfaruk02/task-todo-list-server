@@ -50,16 +50,23 @@ async function run() {
 
     app.patch('/taskList/:id', async (req, res) => {
       const id = req.params.id;
-      const filter = { _id: new ObjectId(id) }
+      const query = { _id: new ObjectId(id) }
       const updatedRole = {
         $set: {
           role: 'Completed'
         }
       }
-      const result = await taskCollection.updateOne(filter, updatedRole);
+      const result = await taskCollection.updateOne(query, updatedRole);
       res.send(result);
     })
-
+    app.put('/taskList/:id', async(req,res)=>{
+      const id = req.params.id;
+      const {title, description} = req.body;
+      const query = { _id: new ObjectId(id) }
+      const update = {$set:{title, description}}
+      const result = await taskCollection.updateOne(query,update);
+      res.send(result);
+  })
 
 
     // Send a ping to confirm a successful connection
