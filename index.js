@@ -27,18 +27,18 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
-    
+
     const taskCollection = client.db("TaskToDoListdB").collection("taskList");
 
-    app.get('/taskList', async (req, res)=>{
-        const result = await taskCollection.find().toArray();
-        res.send(result);
+    app.get('/taskList', async (req, res) => {
+      const result = await taskCollection.find().toArray();
+      res.send(result);
     })
 
-    app.post('/taskList', async(req,res)=>{
-        const query = req.body;
-        const result = await taskCollection.insertOne(query);
-        res.send(result);
+    app.post('/taskList', async (req, res) => {
+      const query = req.body;
+      const result = await taskCollection.insertOne(query);
+      res.send(result);
     })
 
     app.delete('/taskList/:id', async (req, res) => {
@@ -59,19 +59,19 @@ async function run() {
       const result = await taskCollection.updateOne(query, updatedRole);
       res.send(result);
     })
-    app.put('/taskList/:id', async(req,res)=>{
+    app.put('/taskList/:id', async (req, res) => {
       const id = req.params.id;
-      const {title, description} = req.body;
+      const { title, description,deadlines } = req.body;
       const query = { _id: new ObjectId(id) }
-      const update = {$set:{title, description}}
-      const result = await taskCollection.updateOne(query,update);
+      const update = { $set: { title, description, deadlines } }
+      const result = await taskCollection.updateOne(query, update);
       res.send(result);
-  })
+    })
 
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
@@ -83,10 +83,10 @@ run().catch(console.dir);
 
 
 
-app.get('/', (req,res)=>{
-    res.send('Task todo list server is running')
+app.get('/', (req, res) => {
+  res.send('Task todo list server is running')
 })
 
-app.listen(port, ()=>{
-    console.log(`Task todo list server is running on port ${port}`);
+app.listen(port, () => {
+  console.log(`Task todo list server is running on port ${port}`);
 })
